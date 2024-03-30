@@ -4,10 +4,10 @@ import { useMutation, gql } from '@apollo/client';
 
 import Auth from '../utils/auth';
 
-// Define the GraphQL mutation for creating a new user
-const CREATE_USER_MUTATION = gql`
-  mutation createUser($username: String!, $email: String!, $password: String!) {
-    createUser(username: $username, email: $email, password: $password) {
+// Updated GraphQL mutation for creating a new user to match the server's schema
+const ADD_USER_MUTATION = gql`
+  mutation addUser($username: String!, $email: String!, $password: String!) {
+    addUser(username: $username, email: $email, password: $password) {
       token
       user {
         _id
@@ -25,16 +25,24 @@ const SignupForm = () => {
   // Set state for alert
   const [showAlert, setShowAlert] = useState(false);
 
-  // Initialize the mutation hook
-  const [createUser] = useMutation(CREATE_USER_MUTATION, {
+  const [addUser, { loading, error }] = useMutation(ADD_USER_MUTATION, {
     onCompleted: (data) => {
-      Auth.login(data.createUser.token);
+      console.log("Mutation completed with data:", data); // Temporarily log the data for inspection
+      if (data.addUser && data.addUser.token) {
+        // Now, safely use the token
+        Auth.login(data.addUser.token);
+      } else {
+        // This block executes if the data structure is not as expected, which helps prevent runtime errors
+        console.error("No token received:", data);
+        setShowAlert(true); // Optionally, adjust the message to inform of the specific issue
+      }
     },
     onError: (error) => {
       console.error(error);
       setShowAlert(true);
     },
   });
+  
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -51,7 +59,7 @@ const SignupForm = () => {
     } else {
       try {
         // Execute the mutation, passing in the form data as variables
-        await createUser({
+        await addUser({
           variables: { ...userFormData },
         });
       } catch (e) {
@@ -59,6 +67,7 @@ const SignupForm = () => {
       }
     }
 
+    // Reset form state
     setUserFormData({ username: '', email: '', password: '' });
   };
 
@@ -121,4 +130,3 @@ const SignupForm = () => {
 };
 
 export default SignupForm;
-
