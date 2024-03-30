@@ -1,16 +1,40 @@
 import { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import { useMutation, gql } from '@apollo/client';
 
-import { createUser } from '../utils/API';
 import Auth from '../utils/auth';
 
+// Define the GraphQL mutation for creating a new user
+const CREATE_USER_MUTATION = gql`
+  mutation createUser($username: String!, $email: String!, $password: String!) {
+    createUser(username: $username, email: $email, password: $password) {
+      token
+      user {
+        _id
+        username
+      }
+    }
+  }
+`;
+
 const SignupForm = () => {
-  // set initial form state
+  // Set initial form state
   const [userFormData, setUserFormData] = useState({ username: '', email: '', password: '' });
-  // set state for form validation
+  // Set state for form validation
   const [validated] = useState(false);
-  // set state for alert
+  // Set state for alert
   const [showAlert, setShowAlert] = useState(false);
+
+  // Initialize the mutation hook
+  const [createUser] = useMutation(CREATE_USER_MUTATION, {
+    onCompleted: (data) => {
+      Auth.login(data.createUser.token);
+    },
+    onError: (error) => {
+      console.error(error);
+      setShowAlert(true);
+    },
+  });
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -19,45 +43,34 @@ const SignupForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-
-    // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
+
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
-    }
-
-    try {
-      const response = await createUser(userFormData);
-
-      if (!response.ok) {
-        throw new Error('something went wrong!');
+    } else {
+      try {
+        // Execute the mutation, passing in the form data as variables
+        await createUser({
+          variables: { ...userFormData },
+        });
+      } catch (e) {
+        // Errors are handled by the onError option in the useMutation hook
       }
-
-      const { token, user } = await response.json();
-      console.log(user);
-      Auth.login(token);
-    } catch (err) {
-      console.error(err);
-      setShowAlert(true);
     }
 
-    setUserFormData({
-      username: '',
-      email: '',
-      password: '',
-    });
+    setUserFormData({ username: '', email: '', password: '' });
   };
 
   return (
     <>
-      {/* This is needed for the validation functionality above */}
-      <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
-        {/* show alert if server response is bad */}
-        <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
-          Something went wrong with your signup!
-        </Alert>
+      {/* Alert for errors */}
+      <Alert dismissible onClose={() => setShowAlert(false)} show={showAlert} variant='danger'>
+        Something went wrong with your signup!
+      </Alert>
 
+      <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
+        {/* Form fields and submit button */}
         <Form.Group className='mb-3'>
           <Form.Label htmlFor='username'>Username</Form.Label>
           <Form.Control
@@ -108,3 +121,4 @@ const SignupForm = () => {
 };
 
 export default SignupForm;
+
