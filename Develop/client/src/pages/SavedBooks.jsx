@@ -72,11 +72,11 @@ const SavedBooks = () => {
 
   return (
     <>
-      <div fluid className="text-light bg-dark p-5">
+      <Container fluid className="text-light bg-dark p-5">
         <Container>
           <h1>Viewing saved books!</h1>
         </Container>
-      </div>
+      </Container>
       <Container>
         <h2 className='pt-5'>
           {userData.savedBooks?.length
