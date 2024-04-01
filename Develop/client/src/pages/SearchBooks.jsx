@@ -59,6 +59,7 @@ const SearchBooks = () => {
         title: book.volumeInfo.title,
         description: book.volumeInfo.description,
         image: book.volumeInfo.imageLinks?.thumbnail || '',
+        link: book.volumeInfo.infoLink
       }));
 
       setSearchedBooks(bookData);
@@ -89,7 +90,7 @@ const SearchBooks = () => {
       console.error('Error saving book:', err);
     }
   };
-  console.log(searchedBooks.map(book => book.link));
+  searchedBooks.map(book => console.log(book.link));
 
   return (
     <>
@@ -130,8 +131,10 @@ const SearchBooks = () => {
                   <Card.Text>Description: {book.description}</Card.Text>
                   {/* Render the link here */}
         <Card.Text>
-          {/* <a href={encodeURIComponent(book.link)} target="_blank" rel="noopener noreferrer">More Info</a> */}
-          <a href={book.link} target="_blank" rel="noopener noreferrer">More Info</a>
+        <Button variant="primary" href={book.link} target="_blank" rel="noopener noreferrer">
+                      View Book
+                    </Button>
+          {/* <a href={book.link} target="_blank" rel="noopener noreferrer">More Info</a> */}
 
         </Card.Text>
                   <Button
