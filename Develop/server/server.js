@@ -6,7 +6,7 @@ const { typeDefs, resolvers } = require('./schemas');
 const { authMiddleware } = require('./utils/auth');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 async function startServer() {
   // Create a new instance of Apollo server and pass typeDefs and resolvers

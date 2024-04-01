@@ -89,6 +89,7 @@ const SearchBooks = () => {
       console.error('Error saving book:', err);
     }
   };
+  console.log(searchedBooks.map(book => book.link));
 
   return (
     <>
@@ -127,6 +128,12 @@ const SearchBooks = () => {
                   </Card.Text>
                    {/* Make sure the description is rendered here */}
                   <Card.Text>Description: {book.description}</Card.Text>
+                  {/* Render the link here */}
+        <Card.Text>
+          {/* <a href={encodeURIComponent(book.link)} target="_blank" rel="noopener noreferrer">More Info</a> */}
+          <a href={book.link} target="_blank" rel="noopener noreferrer">More Info</a>
+
+        </Card.Text>
                   <Button
                     variant="primary"
                     disabled={savedBookIds.includes(book.bookId)}
