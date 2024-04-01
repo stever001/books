@@ -125,6 +125,8 @@ const SearchBooks = () => {
                   <Card.Text>
                     Authors: {book.authors.join(', ')}
                   </Card.Text>
+                   {/* Make sure the description is rendered here */}
+                  <Card.Text>Description: {book.description}</Card.Text>
                   <Button
                     variant="primary"
                     disabled={savedBookIds.includes(book.bookId)}
