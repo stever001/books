@@ -11,9 +11,10 @@
     "render-build":"npm install && npm run build"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Steve Rouse",
+  "license": "MIT",
   "devDependencies": {
     "concurrently": "^5.1.0"
   }
+
 }
