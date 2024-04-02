@@ -113,7 +113,7 @@ const SavedBooks = () => {
                     <p className='small'>Authors: {book.authors.join(', ')}</p>
                     <Card.Text>{book.description}</Card.Text>
                     <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book.bookId)}>
-                      Delete this Book!
+                      Remove this Book
                     </Button>
                   </Card.Body>
                 </Card>

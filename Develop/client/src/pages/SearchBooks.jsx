@@ -132,7 +132,7 @@ const SearchBooks = () => {
                   {/* Render the link here */}
         <Card.Text>
         <Button variant="primary" href={book.link} target="_blank" rel="noopener noreferrer">
-                      View Book
+                      More Info
                     </Button>
           {/* <a href={book.link} target="_blank" rel="noopener noreferrer">More Info</a> */}
 
@@ -141,7 +141,7 @@ const SearchBooks = () => {
                     variant="primary"
                     disabled={savedBookIds.includes(book.bookId)}
                     onClick={() => handleSaveBook(book.bookId)}>
-                    {savedBookIds.includes(book.bookId) ? 'Saved' : 'Save'}
+                    {savedBookIds.includes(book.bookId) ? 'Saved' : 'Save This Book'}
                   </Button>
                 </Card.Body>
               </Card>
