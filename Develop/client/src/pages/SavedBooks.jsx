@@ -26,7 +26,7 @@ const GET_ME = gql`
 
 // GraphQL mutation for removing a book
 const REMOVE_BOOK = gql`
-  mutation removeBook($bookId: ID!) {
+  mutation removeBook($bookId: String!) {
     removeBook(bookId: $bookId) {
       _id
       savedBooks {
@@ -39,10 +39,29 @@ const REMOVE_BOOK = gql`
 const SavedBooks = () => {
   const [userData, setUserData] = useState({});
   const { loading, data } = useQuery(GET_ME);
-  const [removeBook] = useMutation(REMOVE_BOOK, {
+  const [removeBook, { error }] = useMutation(REMOVE_BOOK, {
     update(cache, { data: { removeBook } }) {
-      setUserData(removeBook);
-    }
+      // Safely read the existing books from the cache
+      const existingBooks = cache.readQuery({ query: GET_ME });
+      if (existingBooks && existingBooks.me && existingBooks.me.savedBooks) {
+        // Perform the cache update
+        const updatedSavedBooks = existingBooks.me.savedBooks.filter(book => book.bookId !== removeBook.bookId);
+        cache.writeQuery({
+          query: GET_ME,
+          data: {
+            me: {
+              ...existingBooks.me,
+              savedBooks: updatedSavedBooks,
+            },
+          },
+        });
+      }
+    },
+    onError(err) {
+      // Enhanced error handling for more informative debugging
+      console.error("Error on removing book:", err);
+      alert("An error occurred while attempting to delete the book. Please check the console for details.");
+    },
   });
 
   useEffect(() => {
@@ -60,9 +79,9 @@ const SavedBooks = () => {
       await removeBook({
         variables: { bookId },
       });
-      removeBookId(bookId); // Remove book's id from localStorage
+      removeBookId(bookId); // Update local storage or UI state as needed
     } catch (err) {
-      console.error(err);
+      console.error("Error in handleDeleteBook:", err);
     }
   };
 
@@ -108,4 +127,7 @@ const SavedBooks = () => {
 };
 
 export default SavedBooks;
+
+
+
 
