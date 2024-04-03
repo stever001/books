@@ -7,8 +7,6 @@ Search for books using the Google Books API. Save your favorites to your list an
 - [Installation](#installation)
 - [Usage](#usage)
 - [License](#license)
-- [Contributing](#contributing)
-- [Tests](#tests)
 - [Questions](#questions)
 
 ## Installation
@@ -16,8 +14,9 @@ Developers can access the application by running 'root/>npm run develop'. This c
 
 ## Usage
 This is a deployed web application.  
-To try out the Search engine, visit the website.  
-  
+To try out the Search engine, visit the website  [Book Search](https://book-search-eqes.onrender.com "Book Search")  
+You can also see the code repository on   [GitHub](https://github.com/stever001/books "My Repo")
+
 Here is a screenshot of the application:  
 
 ![Screenshot](./screenshot.png "Screenshot")
@@ -27,11 +26,6 @@ Here is a screenshot of the application:
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 This project is licensed under the MIT license.
-
-## Contributing
-
-
-## Tests
 
 
 ## Questions
