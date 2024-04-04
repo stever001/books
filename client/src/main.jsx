@@ -12,7 +12,7 @@ import Auth from './utils/auth'; // Assuming Auth is correctly implemented
 
 // Create an HTTP link that connects to your Apollo Server instance
 const httpLink = new HttpLink({
-  uri: 'http://localhost:3001/graphql', // Replace with the correct server URI if necessary
+  uri: '/graphql', // Replace with the correct server URI if necessary
 });
 
 // Middleware to attach the token to requests
